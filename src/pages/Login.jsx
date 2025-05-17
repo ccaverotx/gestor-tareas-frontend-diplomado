@@ -16,9 +16,9 @@ export default function Login() {
     setError("");
 
     try {
-      const url = isRegister
-        ? "http://localhost:5000/api/auth/register"
-        : "http://localhost:5000/api/auth/login";
+      const baseUrl = import.meta.env.VITE_API_URL;
+      const url = `${baseUrl}/auth/${isRegister ? "register" : "login"}`;
+
 
       const payload = isRegister
         ? { name, email, password }
