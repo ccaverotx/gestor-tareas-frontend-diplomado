@@ -11,8 +11,9 @@ export default function Dashboard() {
   const token = localStorage.getItem("token");
 
   const today = new Date().toISOString().split("T")[0];
+  const API = import.meta.env.VITE_API_URL;
 
-  const fetchTasks = async (url = "http://localhost:5000/api/tasks") => {
+  const fetchTasks = async (url = `${API}/tasks`) => {
     try {
       const res = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },
@@ -35,7 +36,7 @@ export default function Dashboard() {
   const handleCreateTask = async ({ title, description, dueDate }) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/tasks",
+        `${API}/tasks`,
         { title, description, dueDate },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -48,7 +49,7 @@ export default function Dashboard() {
   const handleUpdateTask = async ({ id, title, description, dueDate }) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/tasks/${id}`,
+        `${API}/tasks/${id}`,
         { title, description, dueDate },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -64,7 +65,7 @@ export default function Dashboard() {
   const updateStatus = async (id, newStatus) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/tasks/${id}`,
+        `${API}/tasks/${id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -78,7 +79,7 @@ export default function Dashboard() {
 
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
+      await axios.delete(`${API}/tasks/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks((prev) => prev.filter((t) => t.id !== id));
@@ -225,8 +226,8 @@ export default function Dashboard() {
             const value = e.target.value;
             const url =
               value === "todas"
-                ? "http://localhost:5000/api/tasks"
-                : `http://localhost:5000/api/tasks?status=${value}`;
+                ? `${API}/tasks`
+                : `${API}/tasks?status=${value}`;
             fetchTasks(url);
           }}
           className="border px-2 py-1 rounded"
@@ -242,7 +243,7 @@ export default function Dashboard() {
         onSubmit={(e) => {
           e.preventDefault();
           const term = e.target.search.value;
-          fetchTasks(`http://localhost:5000/api/tasks?search=${term}`);
+          fetchTasks(`${API}/tasks?search=${term}`);
         }}
         className="mb-6"
       >
